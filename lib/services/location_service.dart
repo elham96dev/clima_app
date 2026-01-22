@@ -16,7 +16,7 @@ class LocationService {
     if (permission == PermissionStatus.denied) {
       permission = await _location.requestPermission();
       if (permission != PermissionStatus.granted) {
-        throw Exception('Location permission denied');
+        throw Exception('Permission denied');
       }
     }
 

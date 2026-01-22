@@ -1,5 +1,6 @@
-import 'package:clima/utilities/constants.dart';
 import 'package:flutter/material.dart';
+
+import '../utilities/constants.dart';
 
 class CityScreen extends StatefulWidget {
   @override
@@ -7,40 +8,47 @@ class CityScreen extends StatefulWidget {
 }
 
 class _CityScreenState extends State<CityScreen> {
+  String cityName = '';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('images/nature4.jpg'),
+            image: AssetImage('images/nature2.jpg'),
             fit: BoxFit.cover,
           ),
         ),
-        constraints: BoxConstraints.expand(),
         child: SafeArea(
           child: Column(
-            children: <Widget>[
+            children: [
               Align(
                 alignment: Alignment.topLeft,
                 child: TextButton(
-                  onPressed: () {},
-                  child: Icon(
-                    Icons.arrow_back_ios,
-                    size: 50.0,
-                  ),
+                  onPressed: () => Navigator.pop(context),
+                  child: Icon(Icons.arrow_back_ios, size: 40),
                 ),
               ),
-              Container(
-                padding: EdgeInsets.all(20.0),
-                child: null,
+              Padding(
+                padding: EdgeInsets.all(20),
+                child: TextField(
+                  style: TextStyle(color: Colors.black),
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white,
+                    hintText: 'Enter city name',
+                  ),
+                  onChanged: (value) {
+                    cityName = value;
+                  },
+                ),
               ),
               TextButton(
-                onPressed: () {},
-                child: Text(
-                  'Get Weather',
-                  style: kButtonTextStyle,
-                ),
+                onPressed: () {
+                  Navigator.pop(context, cityName);
+                },
+                child: Text('Get Weather', style: kButtonTextStyle),
               ),
             ],
           ),

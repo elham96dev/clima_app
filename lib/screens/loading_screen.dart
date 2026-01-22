@@ -1,6 +1,7 @@
-import 'package:clima/screens/location_screen.dart';
-import 'package:clima/services/location_service.dart';
 import 'package:flutter/material.dart';
+
+import '../services/location_service.dart';
+import 'location_screen.dart';
 
 class LoadingScreen extends StatefulWidget {
   @override
@@ -9,21 +10,17 @@ class LoadingScreen extends StatefulWidget {
 
 class _LoadingScreenState extends State<LoadingScreen> {
   void getLocation() async {
-    try {
-      final locationData = await LocationService().getCurrentLocation();
+    final location = await LocationService().getCurrentLocation();
 
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => LocationScreen(
-            latitude: locationData.latitude!,
-            longitude: locationData.longitude!,
-          ),
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => LocationScreen(
+          latitude: location.latitude!,
+          longitude: location.longitude!,
         ),
-      );
-    } catch (e) {
-      print(e);
-    }
+      ),
+    );
   }
 
   @override
@@ -32,7 +29,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
       body: Center(
         child: ElevatedButton(
           onPressed: getLocation,
-          child: Text('Get Location'),
+          child: Text('Get Weather'),
         ),
       ),
     );
