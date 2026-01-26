@@ -7,16 +7,28 @@ class WeatherService {
   static const String _baseUrl =
       'https://api.openweathermap.org/data/2.5/weather';
 
+  // Weather by GPS location
   Future<Map<String, dynamic>> getWeatherByLocation(
       double lat, double lon) async {
     final url = "$_baseUrl?lat=$lat&lon=$lon&units=metric&appid=$_apiKey";
 
     final response = await http.get(Uri.parse(url));
-
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
       throw Exception('Failed to load weather');
+    }
+  }
+
+  // Weather by city name
+  Future<Map<String, dynamic>> getWeatherByCity(String cityName) async {
+    final url = "$_baseUrl?q=$cityName&units=metric&appid=$_apiKey";
+
+    final response = await http.get(Uri.parse(url));
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception('Failed to load weather for $cityName');
     }
   }
 }

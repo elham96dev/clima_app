@@ -1,3 +1,4 @@
+import 'package:clima/screens/city_screen.dart';
 import 'package:clima/utilities/constants.dart';
 import 'package:flutter/material.dart';
 
@@ -22,36 +23,48 @@ class _LocationScreenState extends State<LocationScreen> {
   String cityName = '';
   String conditionIcon = '';
   String message = '';
-
   final WeatherModel weatherModel = WeatherModel();
 
   @override
   void initState() {
     super.initState();
-    getWeather();
+    getWeather(); // fetch weather for current location initially
   }
 
+  // Get weather by current GPS location
   void getWeather() async {
     try {
       final weatherData = await WeatherService()
           .getWeatherByLocation(widget.latitude, widget.longitude);
 
-      final int condition = weatherData['weather'][0]['id'];
-      final int temp = weatherData['main']['temp'].round();
-      final String city = weatherData['name'];
-      print(condition);
-      print(temp);
-      print(city);
-
-      setState(() {
-        temperature = temp;
-        cityName = city;
-        conditionIcon = weatherModel.getWeatherIcon(condition);
-        message = '${weatherModel.getMessage(temp)} in $city';
-      });
+      updateUI(weatherData);
     } catch (e) {
       print(e);
     }
+  }
+
+  // Get weather by city name
+  void getWeatherByCity(String city) async {
+    try {
+      final weatherData = await WeatherService().getWeatherByCity(city);
+      updateUI(weatherData);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  // Update UI helper
+  void updateUI(Map<String, dynamic> weatherData) {
+    final int condition = weatherData['weather'][0]['id'];
+    final int temp = weatherData['main']['temp'].round();
+    final String city = weatherData['name'];
+
+    setState(() {
+      temperature = temp;
+      cityName = city;
+      conditionIcon = weatherModel.getWeatherIcon(condition);
+      message = '${weatherModel.getMessage(temp)} in $city';
+    });
   }
 
   @override
@@ -77,12 +90,25 @@ class _LocationScreenState extends State<LocationScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
+                    // Left icon: Current location
                     TextButton(
                       onPressed: getWeather,
                       child: Icon(Icons.near_me, size: 50, color: Colors.white),
                     ),
+                    // Right icon: City location
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () async {
+                        final typedCityName = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CityScreen(),
+                          ),
+                        );
+
+                        if (typedCityName != null && typedCityName.isNotEmpty) {
+                          getWeatherByCity(typedCityName);
+                        }
+                      },
                       child: Icon(Icons.location_city,
                           size: 50, color: Colors.white),
                     ),

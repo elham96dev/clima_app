@@ -9,7 +9,7 @@ class WeatherModel {
     } else if (condition < 700) {
       return '☃️';
     } else if (condition < 800) {
-      return '🌫';
+      return '🌫️';
     } else if (condition == 800) {
       return '☀️';
     } else if (condition <= 804) {
@@ -20,11 +20,11 @@ class WeatherModel {
   }
 
   String getMessage(int temp) {
-    if (temp > 25) {
+    if (temp >= 20) {
       return 'It\'s 🍦 time';
-    } else if (temp > 20) {
+    } else if (temp > 15 && temp <= 20) {
       return 'Time for shorts and 👕';
-    } else if (temp < 10) {
+    } else if (temp > 0 && temp <= 5) {
       return 'You\'ll need 🧣 and 🧤';
     } else {
       return 'Bring a 🧥 just in case';
